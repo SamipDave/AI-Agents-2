@@ -111,11 +111,15 @@ def validate_agent(agent_dir: Path) -> list[str]:
             errors.append("metadata.tags must be a non-empty list of strings")
 
     framework = metadata.get("framework")
-    if "framework" in metadata and framework not in ALLOWED_FRAMEWORKS:
+    if isinstance(framework, str) and framework.strip() and framework not in ALLOWED_FRAMEWORKS:
         errors.append("metadata.framework must be one of: " + ", ".join(sorted(ALLOWED_FRAMEWORKS)))
 
     difficulty = metadata.get("difficulty")
-    if "difficulty" in metadata and difficulty not in ALLOWED_DIFFICULTIES:
+    if (
+        isinstance(difficulty, str)
+        and difficulty.strip()
+        and difficulty not in ALLOWED_DIFFICULTIES
+    ):
         errors.append(
             "metadata.difficulty must be one of: " + ", ".join(sorted(ALLOWED_DIFFICULTIES))
         )
@@ -141,15 +145,15 @@ def validate_agent(agent_dir: Path) -> list[str]:
     return errors
 
 
-def validate_repository(root: Path) -> list[str]:
-    """Validate all immediate children of the repository's agents directory."""
+def _validate_repository_with_count(root: Path) -> tuple[list[str], int]:
+    """Validate a repository and return its errors and discovered agent count."""
     agents_dir = root / "agents"
     if not agents_dir.is_dir():
-        return ["agents directory does not exist"]
+        return ["agents directory does not exist"], 0
 
     agent_dirs = sorted(path for path in agents_dir.iterdir() if path.is_dir())
     if not agent_dirs:
-        return ["agents directory contains no agent projects"]
+        return ["agents directory contains no agent projects"], 0
 
     errors: list[str] = []
     numbers: dict[int, str] = {}
@@ -164,6 +168,12 @@ def validate_repository(root: Path) -> list[str]:
             else:
                 numbers[number] = agent_dir.name
         errors.extend(f"{agent_dir.name}: {error}" for error in validate_agent(agent_dir))
+    return errors, len(agent_dirs)
+
+
+def validate_repository(root: Path) -> list[str]:
+    """Return validation errors for all agents in a repository."""
+    errors, _ = _validate_repository_with_count(root)
     return errors
 
 
@@ -178,14 +188,13 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    errors = validate_repository(args.root.resolve())
+    errors, count = _validate_repository_with_count(args.root.resolve())
     if errors:
         print("Agent catalog validation failed:", file=sys.stderr)
         for error in errors:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    count = sum(1 for path in (args.root / "agents").iterdir() if path.is_dir())
     print(f"Validated {count} agent projects.")
     return 0
 
