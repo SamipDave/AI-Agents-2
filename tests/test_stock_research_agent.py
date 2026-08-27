@@ -128,6 +128,33 @@ class StockResearchAgentTests(unittest.TestCase):
         self.assertEqual(data["market_cap"], "N/A")
         self.assertNotIn("error", data)
 
+    def test_fallback_replaces_invalid_fundamentals_price(self):
+        ticker = FakeTicker(
+            info={"currentPrice": 0, "marketCap": 2_000_000},
+            fast_info=MappingFastInfo({"last_price": 99.5, "year_high": 120.0, "year_low": 80.0}),
+        )
+
+        with patch.object(agent, "yf", ticker_factory(ticker)):
+            data = agent.get_stock_data("aapl")
+
+        self.assertEqual(data["price"], 99.5)
+        self.assertNotIn("error", data)
+
+    def test_fallback_fills_missing_history_fields_when_price_is_valid(self):
+        ticker = FakeTicker(
+            info={"currentPrice": 99.5},
+            fast_info=MappingFastInfo(
+                {"last_price": 99.5, "market_cap": 2_000_000, "year_high": 120.0, "year_low": 80.0}
+            ),
+        )
+
+        with patch.object(agent, "yf", ticker_factory(ticker)):
+            data = agent.get_stock_data("aapl")
+
+        self.assertEqual(data["market_cap"], 2_000_000)
+        self.assertEqual(data["52w_high"], 120.0)
+        self.assertEqual(data["52w_low"], 80.0)
+
     def test_complete_yahoo_failure_is_truthful(self):
         ticker = FakeTicker(
             info_error=RuntimeError("rate limited"),

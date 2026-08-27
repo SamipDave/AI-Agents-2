@@ -132,10 +132,14 @@ def get_stock_data(ticker: str) -> dict:
         "description": _clean_value(info.get("longBusinessSummary"), MISSING),
     }
 
-    if info_error or not _usable_price(data["price"]):
+    fallback_keys = ("price", "market_cap", "52w_high", "52w_low")
+    if info_error or any(
+        data[key] == MISSING or (key == "price" and not _usable_price(data[key]))
+        for key in fallback_keys
+    ):
         fallback = _fast_info_fallback(stock)
         for key, value in fallback.items():
-            if data[key] == MISSING:
+            if data[key] == MISSING or (key == "price" and not _usable_price(data[key])):
                 data[key] = value
 
     if not _usable_price(data["price"]):
