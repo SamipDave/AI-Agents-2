@@ -119,6 +119,7 @@ Choosing a framework? Here's when to use each:
 | **PII Sanitization Agent** | Privacy/Compliance | Redacts PII (emails, phones, national IDs, bank accounts, API keys) from text before it reaches an LLM; fail-closed, multilingual, on-chain proof via TrustBoost | [![GitHub](https://img.shields.io/badge/Code-GitHub-black?logo=github)](https://github.com/teodorofodocrispin-cmyk/TrustBoost-PII-Sanitizer) |
 
 ---
+| **MiniMax H3 1K Prompt Dataset** | Video Generation | Curated 1K text-to-video prompts: 3-field structure anatomy, 10 reusable prompts, H3 vs. peer comparison | [![Code](https://img.shields.io/badge/Code-GitHub-black?logo=github)](https://github.com/yangzhou-chaofan/minimax-h3-1000-prompts) |
 
 ## 🔧 Browse by Framework
 
