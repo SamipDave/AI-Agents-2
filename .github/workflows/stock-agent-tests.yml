@@ -1,0 +1,36 @@
+name: Stock Agent Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "agents/11-stock-research-agent/**"
+      - "tests/test_stock_research_agent.py"
+      - ".github/workflows/stock-agent-tests.yml"
+  pull_request:
+    paths:
+      - "agents/11-stock-research-agent/**"
+      - "tests/test_stock_research_agent.py"
+      - ".github/workflows/stock-agent-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-stock-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install stock agent dependencies
+        run: python -m pip install -r agents/11-stock-research-agent/requirements.txt
+
+      - name: Run offline stock agent tests
+        run: python -B -m unittest discover -s tests -p "test_stock_research_agent.py" -v
