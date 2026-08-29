@@ -28,7 +28,7 @@ python agent.py
 | 11 | [Stock Research Agent](11-stock-research-agent/) | LangChain | GPT-4o | Finance | ⭐⭐ |
 | 12 | [Travel Planner Agent](12-travel-planner-agent/) | CrewAI | GPT-4o | Travel | ⭐⭐ |
 | 13 | [Customer Support Agent](13-customer-support-agent/) | LangGraph | GPT-4o | Customer Service | ⭐⭐⭐ |
-| 14 | [Social Media Content Agent](14-social-media-agent/) | CrewAI | GPT-4o | Marketing | ⭐ |
+| 14 | [Social Media Content Agent](14-social-media-agent/) | CrewAI | GPT-4o-mini | Marketing | ⭐ |
 | 15 | [Unit Test Generator Agent](15-unit-test-generator/) | LangChain | GPT-4o / Claude | Software Dev | ⭐⭐ |
 | 16 | [Documentation Writer Agent](16-documentation-writer/) | LangChain | GPT-4o / Claude | Software Dev | ⭐⭐ |
 | 17 | [Recipe Recommendation Agent](17-recipe-agent/) | LangChain | GPT-4o | Food | ⭐ |
