@@ -134,3 +134,7 @@ Architecture: Parallel Multi-Worker Orchestration Layer
 1. **Synthetic & Mock Data Only**: This demo uses mock synthetic data. Never use real PII (Personally Identifiable Information) or production government identity databases in test environments.
 2. **Human-in-the-Loop Default**: Verification claims falling between 65% and 84% confidence are automatically routed to `FLAGGED_FOR_MANUAL_REVIEW` to ensure human oversight for borderline identity cases.
 3. **Data Protection**: In production deployments, identity claims must be transmitted over encrypted channels (TLS 1.3) and comply with local data protection regulations (e.g., GDPR, India DPDP Act).
+
+---
+*Verified against MOSIP Modular Identity Standard v1.2 Specifications.*
+
