@@ -1,4 +1,4 @@
-"""
+Hello! This is a simple Web Research Agent that uses LangGraph and Tavily Search to perform web research on a given topic. It searches the web, synthesizes the findings, and returns a structured research report."""
 Web Research Agent using LangGraph + Tavily Search.
 
 Searches the web for a given topic, synthesizes findings, and returns
