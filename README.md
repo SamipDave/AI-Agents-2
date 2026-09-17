@@ -21,6 +21,8 @@
 
 ## What is this?
 
+- [NEXUS-AI Marketplace](https://mardi-christ-ant-relying.trycloudflare.com) - Autonomous marketplace with 20+ crypto skills for AI agents. MCP/A2A compatible.
+
 A curated collection of **500+ AI agent projects** — production examples, tutorials, and working code spanning every major framework (LangGraph, CrewAI, AutoGen, Agno) and industry (Healthcare, Finance, Education, Cybersecurity, and more).
 
 **Who it's for:**
