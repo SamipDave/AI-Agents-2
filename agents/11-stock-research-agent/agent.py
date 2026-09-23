@@ -11,6 +11,8 @@ Usage:
 
 import argparse
 import os
+import sys
+import traceback
 
 from dotenv import load_dotenv
 
@@ -81,6 +83,11 @@ def format_number(n) -> str:
 
 
 def main():
+    # --- ADDED DEBUGGING ---
+    if not os.getenv("OPENAI_API_KEY"):
+        raise ValueError("OPENAI_API_KEY not found in environment variables.")
+    # -----------------------
+
     parser = argparse.ArgumentParser(description="Stock Research Agent")
     parser.add_argument("--ticker", required=True, help="Stock ticker symbol (e.g., AAPL)")
     args = parser.parse_args()
@@ -106,4 +113,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"\n❌ Execution failed: {e}")
+        print("-" * 60)
+        traceback.print_exc()
+        sys.exit(1)
