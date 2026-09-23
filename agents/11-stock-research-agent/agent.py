@@ -14,24 +14,20 @@ import os
 import sys
 import traceback
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    import yfinance as yf
+    from langchain_core.messages import HumanMessage, SystemMessage
+    from langchain_openai import ChatOpenAI
+except ModuleNotFoundError as e:
+    print(f"Error: Missing required dependency: {e.name}")
+    print("Please run 'pip install -r requirements.txt' to install dependencies.")
+    sys.exit(1)
 
 load_dotenv()
 
-try:
-    import yfinance as yf
-    HAS_YFINANCE = True
-except ImportError:
-    HAS_YFINANCE = False
-
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
-
 
 def get_stock_data(ticker: str) -> dict:
-    if not HAS_YFINANCE:
-        return {"ticker": ticker, "error": "yfinance not installed", "mock": True}
-
     stock = yf.Ticker(ticker)
     info = stock.info
 

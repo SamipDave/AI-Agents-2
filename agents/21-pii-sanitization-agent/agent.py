@@ -105,8 +105,7 @@ def sanitize(text: str, context: str = "general", tx_hash: str = "TRIAL") -> dic
         "status": "success",
         "data": {
             "sanitized_content": sanitized_content,
-            "safety_score": 1.0,
-            "risk_category": "PRIVATE" if entities else "NONE",
+            "risk_category": "PRIVATE" if entities else "UNKNOWN",
             "entities": entities,
         },
     }
@@ -155,7 +154,7 @@ def _run_self_checks() -> None:
     literal_placeholder_result = sanitize("The literal [EMAIL] is not PII.")
     assert literal_placeholder_result["data"]["sanitized_content"] == "The literal [EMAIL] is not PII."
     assert literal_placeholder_result["data"]["entities"] == []
-    assert literal_placeholder_result["data"]["risk_category"] == "NONE"
+    assert literal_placeholder_result["data"]["risk_category"] == "UNKNOWN"
 
 
 if __name__ == "__main__":
