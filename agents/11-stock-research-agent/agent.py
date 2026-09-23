@@ -11,25 +11,23 @@ Usage:
 
 import argparse
 import os
+import sys
+import traceback
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    import yfinance as yf
+    from langchain_core.messages import HumanMessage, SystemMessage
+    from langchain_openai import ChatOpenAI
+except ModuleNotFoundError as e:
+    print(f"Error: Missing required dependency: {e.name}")
+    print("Please run 'pip install -r requirements.txt' to install dependencies.")
+    sys.exit(1)
 
 load_dotenv()
 
-try:
-    import yfinance as yf
-    HAS_YFINANCE = True
-except ImportError:
-    HAS_YFINANCE = False
-
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
-
 
 def get_stock_data(ticker: str) -> dict:
-    if not HAS_YFINANCE:
-        return {"ticker": ticker, "error": "yfinance not installed", "mock": True}
-
     stock = yf.Ticker(ticker)
     info = stock.info
 
@@ -81,6 +79,11 @@ def format_number(n) -> str:
 
 
 def main():
+    # --- ADDED DEBUGGING ---
+    if not os.getenv("OPENAI_API_KEY"):
+        raise ValueError("OPENAI_API_KEY not found in environment variables.")
+    # -----------------------
+
     parser = argparse.ArgumentParser(description="Stock Research Agent")
     parser.add_argument("--ticker", required=True, help="Stock ticker symbol (e.g., AAPL)")
     args = parser.parse_args()
@@ -106,4 +109,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"\n❌ Execution failed: {e}")
+        print("-" * 60)
+        traceback.print_exc()
+        sys.exit(1)
